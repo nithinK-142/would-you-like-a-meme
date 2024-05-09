@@ -7,30 +7,27 @@ import {
   HandThumbUpIcon,
   TvIcon,
 } from "@heroicons/vue/24/solid";
+import Navbar from "./Navbar.vue";
 
 const memeStore = useMemeStore();
 
-onMounted(() => {
-  memeStore.fetchMemes();
-});
+onMounted(() => memeStore.fetchMemes());
 </script>
 
 <template>
-  <div class="container px-4 py-8 mx-auto">
-    <h1 class="mb-6 text-3xl font-semibold">Would You like a Meme?</h1>
-
-    <div v-if="memeStore.isLoading">Loading...</div>
-    <div v-else-if="memeStore.error" class="text-red-500">
+  <main>
+    <Navbar />
+    <div v-if="memeStore.error" class="p-4 pt-16 text-red-500">
       {{ memeStore.error }}
     </div>
     <div
       v-else
-      class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      class="grid grid-cols-1 gap-4 px-4 pb-4 mt-16 sm:grid-cols-2 lg:grid-cols-3"
     >
       <div
         v-for="meme in memeStore.memes"
         :key="meme.postLink"
-        class="p-4 h-[30rem] rounded-lg shadow-md bg-stone-700/50"
+        class="p-4 rounded-lg shadow-md bg-stone-700/50"
       >
         <h2 class="flex items-center mb-2 text-lg font-bold">
           <BookmarkIcon class="w-5 h-5 mr-2 text-gray-400" />
@@ -48,13 +45,15 @@ onMounted(() => {
           <HandThumbUpIcon class="w-4 h-4 mr-2 text-gray-400" />
           {{ meme.ups }} Upvotes
         </div>
-
-        <img
-          :src="meme.url"
-          :alt="meme.title"
-          class="w-full h-auto rounded-md"
-        />
+        <div class="h-[20rem]">
+          <img
+            :src="meme.url"
+            :alt="meme.title"
+            class="object-contain w-full h-full mx-auto rounded-md"
+          />
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
+./Header.vue

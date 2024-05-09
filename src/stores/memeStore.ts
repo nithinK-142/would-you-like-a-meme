@@ -14,7 +14,7 @@ interface Meme {
 }
 
 export const useMemeStore = defineStore("memeStore", () => {
-  const MEME_API_URL = "https://meme-api.com/gimme/4";
+  const MEME_API_URL = "https://meme-api.com/gimme/9";
   const memes = ref<Meme[]>([]);
   const isLoading = ref<boolean>(false);
   const error = ref<string | null>(null);
