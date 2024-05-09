@@ -15,7 +15,7 @@ onMounted(() => memeStore.fetchMemes());
 </script>
 
 <template>
-  <main>
+  <main class="h-screen sm:floating-scrollbar">
     <Navbar />
     <div v-if="memeStore.error" class="p-4 pt-16 text-red-500">
       {{ memeStore.error }}
