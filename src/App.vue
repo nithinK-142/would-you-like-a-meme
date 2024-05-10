@@ -12,12 +12,12 @@ onMounted(() => memeStore.fetchMemes());
 <template>
   <main class="h-screen sm:floating-scrollbar">
     <Navbar />
-    <div v-if="memeStore.error" class="p-4 pt-16 text-red-500">
+    <div v-if="memeStore.error" class="p-4 mt-16 text-red-500">
       {{ memeStore.error }}
     </div>
     <div
       v-else
-      class="grid grid-cols-1 gap-4 px-4 pb-4 mt-16 sm:grid-cols-2 lg:grid-cols-3"
+      class="grid grid-cols-1 gap-4 px-4 mt-16 mb-4 sm:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4"
     >
       <div
         v-for="meme in memeStore.memes"
@@ -26,7 +26,13 @@ onMounted(() => memeStore.fetchMemes());
       >
         <div class="flex items-center mb-2">
           <img src="./reddit.svg" class="w-5 h-5 mr-2" />
-          <span class="text-sm font-semibold">{{ meme.subreddit }}</span>
+          <a
+            :href="'https://www.reddit.com/r/' + meme.subreddit"
+            target="_blank"
+            class="text-sm font-semibold"
+          >
+            {{ meme.subreddit }}
+          </a>
         </div>
         <div class="flex space-x-4">
           <div class="flex items-center mb-2">
@@ -43,11 +49,13 @@ onMounted(() => memeStore.fetchMemes());
           {{ meme.title }}
         </h2>
         <div class="h-[20rem]">
-          <img
-            :src="meme.url"
-            :alt="meme.title"
-            class="object-contain w-full h-full mx-auto rounded-md"
-          />
+          <a :href="meme.url" target="_blank">
+            <img
+              :src="meme.url"
+              :alt="meme.title"
+              class="object-contain w-full h-full mx-auto rounded-md"
+            />
+          </a>
         </div>
       </div>
     </div>
