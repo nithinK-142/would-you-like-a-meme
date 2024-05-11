@@ -25,7 +25,7 @@ onMounted(() => memeStore.fetchMemes());
         class="p-4 rounded-lg shadow-md bg-stone-700/50"
       >
         <div class="flex items-center mb-2">
-          <img src="./reddit.svg" class="w-5 h-5 mr-2" />
+          <img src="./assets/reddit.svg" class="w-5 h-5 mr-2" />
           <a
             :href="'https://www.reddit.com/r/' + meme.subreddit"
             target="_blank"
@@ -36,7 +36,7 @@ onMounted(() => memeStore.fetchMemes());
         </div>
         <div class="flex space-x-4">
           <div class="flex items-center mb-2">
-            <img src="./reddit-user.svg" class="w-5 h-5 mr-2" />
+            <img src="./assets/reddit-user.svg" class="w-5 h-5 mr-2" />
             <span class="text-base">u/{{ meme.author }}</span>
           </div>
 

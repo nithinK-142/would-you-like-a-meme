@@ -3,7 +3,6 @@ import { useMemeStore } from "@/stores/memeStore";
 import { RefreshCwIcon } from "lucide-vue-next";
 
 const memeStore = useMemeStore();
-const fetchMemes = memeStore.fetchMemes;
 </script>
 
 <template>
@@ -12,7 +11,7 @@ const fetchMemes = memeStore.fetchMemes;
       <h1 class="text-base font-semibold sm:text-lg md:text-xl">
         Would You like a Meme?
       </h1>
-      <button @click="fetchMemes" class="ml-4">
+      <button @click="memeStore.fetchMemes" class="ml-4">
         <RefreshCwIcon :class="memeStore.isLoading && 'animate-spin'" />
       </button>
     </div>
