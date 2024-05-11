@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-interface Meme {
+export interface Meme {
   postLink: string;
   subreddit: string;
   title: string;
