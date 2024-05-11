@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMemeStore } from "@/stores/memeStore";
 import { onMounted } from "vue";
-import Navbar from "./Navbar.vue";
+import Navbar from "./components/Navbar.vue";
 import { ArrowBigUp } from "lucide-vue-next";
 
 const memeStore = useMemeStore();
@@ -67,3 +67,4 @@ onMounted(() => memeStore.fetchMemes());
     </div>
   </main>
 </template>
+./components/Navbar.vue
