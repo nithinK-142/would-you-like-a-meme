@@ -45,7 +45,13 @@ onMounted(() => memeStore.fetchMemes());
             {{ meme.ups.toLocaleString() }}
           </div>
         </div>
-        <h2 class="flex items-center mb-2 text-lg">
+        <h2
+          v-if="
+            meme.subreddit.toLocaleLowerCase() !==
+            meme.title.toLocaleLowerCase()
+          "
+          class="flex items-center mb-2 text-lg"
+        >
           {{ meme.title }}
         </h2>
         <div class="h-[20rem]">
@@ -61,5 +67,3 @@ onMounted(() => memeStore.fetchMemes());
     </div>
   </main>
 </template>
-
-<!-- :style="{ backgroundImage: `url(${meme.url})` }" -->
