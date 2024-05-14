@@ -6,11 +6,29 @@ import type { Meme } from "@/stores/memeStore";
 import Card from "primevue/card";
 
 defineProps<{ memes: Meme[] }>();
+
+import { ref } from "vue";
+import Dialog from "primevue/dialog";
+
+const visible = ref(false);
+const clickedImageUrl = ref("");
+const clickedImageTitle = ref("");
 </script>
 <template>
   <div
     class="grid grid-cols-1 gap-4 px-4 mt-16 mb-4 sm:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4"
   >
+    <Dialog v-model:visible="visible" :header="clickedImageTitle" modal>
+      <div class="h-[30rem]">
+        <a :href="clickedImageUrl" target="_blank" rel="noopener noreferrer">
+          <img
+            v-if="clickedImageUrl"
+            :src="clickedImageUrl"
+            alt="Clicked Image"
+            class="object-contain w-full h-full"
+        /></a>
+      </div>
+    </Dialog>
     <Card
       class="p-4 bg-stone-700/50"
       v-for="meme in memes"
@@ -53,14 +71,19 @@ defineProps<{ memes: Meme[] }>();
       </template>
 
       <template #content>
-        <div class="h-[20rem]">
-          <a :href="meme.url" target="_blank">
-            <img
-              :src="meme.url"
-              :alt="meme.title"
-              class="object-contain w-full h-full mx-auto rounded-md"
-            />
-          </a>
+        <div
+          class="h-[20rem]"
+          @click="
+            visible = true;
+            clickedImageUrl = meme.url;
+            clickedImageTitle = meme.title;
+          "
+        >
+          <img
+            :src="meme.url"
+            :alt="meme.title"
+            class="object-contain w-full h-full mx-auto rounded-md"
+          />
         </div>
       </template>
     </Card>

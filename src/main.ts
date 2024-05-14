@@ -6,7 +6,7 @@ import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
 import Ripple from "primevue/ripple";
 import StyleClass from "primevue/styleclass";
-import Lara from "./presets/aura";
+import Lara from "./presets/lara";
 import App from "./App.vue";
 
 const app = createApp(App);
