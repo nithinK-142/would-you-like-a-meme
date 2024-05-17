@@ -7,18 +7,18 @@
       <Button icon="pi pi-arrow-up" @click="visibleBottom = true" />
     </div>
 
-    <Sidebar v-model:visible="visibleLeft" header="Left Sidebar">
+    <Drawer v-model:visible="visibleLeft" header="Left Drawer">
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
         commodo consequat.
       </p>
-    </Sidebar>
+    </Drawer>
 
-    <Sidebar
+    <Drawer
       v-model:visible="visibleRight"
-      header="Right Sidebar"
+      header="Right Drawer"
       position="right"
     >
       <p>
@@ -27,11 +27,11 @@
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
         commodo consequat.
       </p>
-    </Sidebar>
+    </Drawer>
 
-    <Sidebar
+    <Drawer
       v-model:visible="visibleTop"
-      header="Top Sidebar"
+      header="Top Drawer"
       position="top"
       style="height: auto"
     >
@@ -41,11 +41,11 @@
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
         commodo consequat.
       </p>
-    </Sidebar>
+    </Drawer>
 
-    <Sidebar
+    <Drawer
       v-model:visible="visibleBottom"
-      header="Bottom Sidebar"
+      header="Bottom Drawer"
       position="bottom"
       style="height: auto"
     >
@@ -55,7 +55,7 @@
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
         commodo consequat.
       </p>
-    </Sidebar>
+    </Drawer>
   </div>
 </template>
 

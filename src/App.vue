@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import OverlayAll from "./components/OverlayAll.vue";
 import Drawer from "./components/Drawer.vue";
+import Pop from "./components/Pop.vue";
 </script>
 
 <template>
@@ -11,5 +12,6 @@ import Drawer from "./components/Drawer.vue";
     <Button label="Submit" icon="pi pi-check" iconPos="right" />
     <OverlayAll />
     <Drawer />
+    <Pop />
   </main>
 </template>
