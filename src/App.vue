@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import OverlayAll from "./components/OverlayAll.vue";
-import Drawer from "./components/Drawer.vue";
+import Pop from "./components/Pop.vue";
+import { ref } from "vue";
+const date = ref();
 </script>
 
 <template>
-  <main
-    class="flex flex-col items-center justify-center h-screen p-6 space-y-6"
-  >
+  <main class="flex flex-col items-center p-6 space-y-6">
     <h1 class="text-2xl font-semibold text-center">PrimeVue v3</h1>
-    <Button label="Submit" icon="pi pi-check" iconPos="right" />
     <OverlayAll />
-    <Drawer />
+    <Calendar v-model="date" />
+    <Pop />
   </main>
 </template>
