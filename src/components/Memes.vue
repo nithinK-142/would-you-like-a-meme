@@ -90,7 +90,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
   <!-- Skeleton -->
   <div
     v-if="memeStore.isLoading"
-    class="flex items-center justify-center px-4 pt-36 pb-8 min-h-screen"
+    class="flex items-center justify-center px-4" style="height: 100vh; padding-top: 73px; box-sizing: border-box;"
   >
     <div class="w-full max-w-2xl rounded-3xl bg-white/5 overflow-hidden animate-pulse">
       <div class="p-6 space-y-3">
@@ -108,10 +108,10 @@ watch(() => props.memes, (newMemes, oldMemes) => {
   <!-- Card viewer -->
   <div
     v-else-if="current"
-    class="flex flex-col items-center pt-36 pb-10 px-4 min-h-screen select-none"
+    class="flex flex-col items-center justify-center px-4 select-none gap-3" style="height: 100vh; padding-top: 73px; box-sizing: border-box;"
   >
     <!-- Progress -->
-    <div class="w-full max-w-2xl mb-4 flex items-center gap-3">
+    <div class="w-full max-w-2xl flex items-center gap-3">
       <div class="flex-1 h-1 bg-white/12 rounded-full overflow-hidden">
         <div
           class="h-full bg-white/50 rounded-full transition-all duration-300"
@@ -126,7 +126,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
 
     <!-- Card -->
     <div
-      class="w-full max-w-2xl rounded-3xl bg-[#242424] border border-white/12 overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing"
+      class="w-full max-w-2xl rounded-3xl bg-[#242424] border border-white/12 overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing flex flex-col" style="max-height: calc(100vh - 9rem)"
       :style="{
         transform: isDragging
           ? `translateX(${dragDelta * 0.12}px) rotate(${dragDelta * 0.012}deg)`
@@ -166,7 +166,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
       >{{ current.title }}</p>
 
       <!-- Image area -->
-      <div class="relative bg-black/40 group/card">
+      <div class="relative bg-black/40 group/card flex-1 min-h-0">
         <!-- NSFW overlay -->
         <div
           v-if="isNsfw && !revealed"
@@ -183,13 +183,14 @@ watch(() => props.memes, (newMemes, oldMemes) => {
         <!-- Image -->
         <div
           :class="revealed || !isNsfw ? 'cursor-zoom-in' : ''"
+          class="h-full"
           @click.stop="openLightbox"
         >
           <img
             :key="current.url"
             :src="current.preview?.length ? current.preview[current.preview.length - 1] : current.url"
             :alt="current.title"
-            class="w-full max-h-[36rem] object-contain transition-opacity duration-200"
+            class="w-full h-full object-contain transition-opacity duration-200"
             :class="[
               imgLoaded ? 'opacity-100' : 'opacity-0',
               isNsfw && !revealed ? 'blur-2xl' : '',
@@ -250,7 +251,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
       </div>
     </div>
 
-    <p class="mt-5 text-sm text-white/20 tracking-wide">swipe or use ← → keys</p>
+    <p class="text-sm text-white/20 tracking-wide">swipe or use ← → keys</p>
   </div>
 
   <!-- Lightbox -->
