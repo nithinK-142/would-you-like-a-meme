@@ -202,24 +202,27 @@ watch(() => props.memes, (newMemes, oldMemes) => {
 
         <!-- Left arrow -->
         <button
-          v-if="currentIndex > 0"
           @click.stop="prev"
+          :disabled="currentIndex === 0"
           class="absolute left-0 inset-y-0 w-16 z-20 flex items-center justify-start pl-3
                  opacity-0 group-hover/card:opacity-100 transition-opacity"
         >
-          <div class="bg-black/60 hover:bg-black/85 rounded-full p-2 transition-colors">
+          <div class="bg-black/60 rounded-full p-2 transition-colors"
+               :class="currentIndex === 0 ? 'opacity-30' : 'hover:bg-black/85'"
+          >
             <ChevronLeft :size="22" class="text-white" />
           </div>
         </button>
 
         <!-- Right arrow -->
         <button
-          v-if="currentIndex < memes.length - 1 || memeStore.isLoadingMore"
           @click.stop="next"
-          class="absolute right-0 inset-y-0 w-16 z-20 flex items-center justify-end pr-3
-                 opacity-0 group-hover/card:opacity-100 transition-opacity"
+          :disabled="currentIndex >= memes.length - 1 && !memeStore.isLoadingMore"
+          class="absolute right-0 inset-y-0 w-16 z-20 flex items-center justify-end pr-3 opacity-0 group-hover/card:opacity-100 transition-opacity"
         >
-          <div class="bg-black/60 hover:bg-black/85 rounded-full p-2 transition-colors">
+          <div class="bg-black/60 rounded-full p-2 transition-colors"
+               :class="currentIndex >= memes.length - 1 && !memeStore.isLoadingMore ? 'opacity-30' : 'hover:bg-black/85'"
+          >
             <ChevronRight :size="22" class="text-white" />
           </div>
         </button>
