@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 export interface Meme {
@@ -13,26 +13,91 @@ export interface Meme {
   preview: string[];
 }
 
+export const SUBREDDITS = [
+  { label: "r/memes", value: "memes" },
+  { label: "r/dankmemes", value: "dankmemes" },
+  { label: "r/me_irl", value: "me_irl" },
+  { label: "r/ProgrammerHumor", value: "ProgrammerHumor" },
+  { label: "r/technicallythetruth", value: "technicallythetruth" },
+  { label: "r/shitposting", value: "shitposting" },
+];
+
 export const useMemeStore = defineStore("memeStore", () => {
-  const MEME_API_URL = "https://meme-api.com/gimme/9";
   const memes = ref<Meme[]>([]);
   const isLoading = ref<boolean>(false);
+  const isLoadingMore = ref<boolean>(false);
   const error = ref<string | null>(null);
+  const selectedSubreddit = ref<string>("memes");
+  const seenUrls = ref<Set<string>>(new Set());
+  const count = ref<number>(0);
 
-  const fetchMemes = async () => {
+  const hasNsfw = computed(() => memes.value.some((m) => m.nsfw || m.spoiler));
+
+  const buildUrl = (subreddit: string, n = 12) =>
+    `https://meme-api.com/gimme/${subreddit}/${n}`;
+
+  const dedupMemes = (incoming: Meme[]): Meme[] => {
+    return incoming.filter((m) => {
+      if (seenUrls.value.has(m.url)) return false;
+      seenUrls.value.add(m.url);
+      return true;
+    });
+  };
+
+  const fetchMemes = async (subreddit = selectedSubreddit.value) => {
     isLoading.value = true;
     error.value = null;
+    seenUrls.value.clear();
+    count.value = 0;
 
     try {
-      const response = await fetch(MEME_API_URL);
+      // Fetch extra to account for dedup losses
+      const response = await fetch(buildUrl(subreddit, 18));
+      if (!response.ok) throw new Error(`Failed to fetch (${response.status})`);
       const data = await response.json();
-      memes.value = data.memes;
+      const fresh = dedupMemes(data.memes ?? []);
+      memes.value = fresh;
+      count.value = fresh.length;
     } catch (err: any) {
-      error.value = err.message;
+      error.value = err.message ?? "Something went wrong";
     } finally {
       isLoading.value = false;
     }
   };
 
-  return { memes, isLoading, error, fetchMemes };
+  const loadMore = async () => {
+    if (isLoadingMore.value) return;
+    isLoadingMore.value = true;
+
+    try {
+      const response = await fetch(buildUrl(selectedSubreddit.value, 18));
+      if (!response.ok) throw new Error(`Failed to fetch (${response.status})`);
+      const data = await response.json();
+      const fresh = dedupMemes(data.memes ?? []);
+      memes.value.push(...fresh);
+      count.value += fresh.length;
+    } catch (err: any) {
+      error.value = err.message ?? "Something went wrong";
+    } finally {
+      isLoadingMore.value = false;
+    }
+  };
+
+  const switchSubreddit = (subreddit: string) => {
+    selectedSubreddit.value = subreddit;
+    fetchMemes(subreddit);
+  };
+
+  return {
+    memes,
+    isLoading,
+    isLoadingMore,
+    error,
+    selectedSubreddit,
+    count,
+    hasNsfw,
+    fetchMemes,
+    loadMore,
+    switchSubreddit,
+  };
 });
