@@ -6,44 +6,35 @@ const memeStore = useMemeStore();
 </script>
 
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-[#0d0d0d] border-b border-white/10">
-    <!-- Top bar -->
-    <div class="flex items-center justify-between px-4 py-3">
-      <div class="flex items-center gap-3">
-        <h1 class="text-base font-semibold tracking-tight">
-          🍿 meme feed
-        </h1>
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a]/95 backdrop-blur border-b border-white/20">
+    <div class="flex items-center justify-between px-6 py-4">
+      <div class="flex items-baseline gap-3">
+        <h1 class="text-xl font-bold tracking-tight">🍿 meme feed</h1>
         <span
           v-if="memeStore.count > 0 && !memeStore.isLoading"
-          class="text-xs text-white/40 font-mono tabular-nums"
-        >
-          {{ memeStore.count }} loaded
-        </span>
+          class="text-sm text-white/35 font-mono"
+        >{{ memeStore.count }} loaded</span>
       </div>
       <button
         @click="memeStore.fetchMemes()"
         :disabled="memeStore.isLoading"
-        class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-40 transition-colors"
+        class="flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-white/8 hover:bg-white/15 disabled:opacity-40 transition-colors font-medium"
       >
-        <RefreshCwIcon
-          :size="13"
-          :class="memeStore.isLoading && 'animate-spin'"
-        />
+        <RefreshCwIcon :size="15" :class="memeStore.isLoading && 'animate-spin'" />
         Refresh
       </button>
     </div>
 
-    <!-- Subreddit tabs -->
-    <div class="flex overflow-x-auto scrollbar-none px-4 pb-2 gap-2">
+    <div class="flex overflow-x-auto scrollbar-none px-6 pb-3 gap-2">
       <button
         v-for="sub in SUBREDDITS"
         :key="sub.value"
         @click="memeStore.switchSubreddit(sub.value)"
         :class="[
-          'shrink-0 text-xs px-3 py-1 rounded-full border transition-all',
+          'shrink-0 text-sm px-4 py-1.5 rounded-full border font-medium transition-all',
           memeStore.selectedSubreddit === sub.value
-            ? 'bg-white text-black border-white font-semibold'
-            : 'text-white/50 border-white/15 hover:border-white/40 hover:text-white/80',
+            ? 'bg-white text-black border-white'
+            : 'text-white/60 border-white/20 hover:border-white/35 hover:text-white',
         ]"
       >
         {{ sub.label }}

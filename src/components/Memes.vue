@@ -90,17 +90,17 @@ watch(() => props.memes, (newMemes, oldMemes) => {
   <!-- Skeleton -->
   <div
     v-if="memeStore.isLoading"
-    class="flex flex-col items-center justify-center pt-[7rem] px-4 h-[calc(100vh-4rem)]"
+    class="flex items-center justify-center px-4 pt-36 pb-8 min-h-screen"
   >
-    <div class="w-full max-w-lg rounded-2xl bg-white/5 overflow-hidden animate-pulse">
-      <div class="p-4 space-y-2">
-        <div class="h-3 w-24 bg-white/10 rounded" />
-        <div class="h-3 w-48 bg-white/10 rounded" />
+    <div class="w-full max-w-2xl rounded-3xl bg-white/5 overflow-hidden animate-pulse">
+      <div class="p-6 space-y-3">
+        <div class="h-4 w-32 bg-white/10 rounded-full" />
+        <div class="h-4 w-56 bg-white/8 rounded-full" />
+        <div class="h-5 w-80 bg-white/10 rounded-full mt-4" />
       </div>
-      <div class="h-80 bg-white/5" />
-      <div class="p-4 flex justify-between">
-        <div class="h-3 w-20 bg-white/10 rounded" />
-        <div class="h-3 w-20 bg-white/10 rounded" />
+      <div class="h-96 bg-white/5" />
+      <div class="p-5 flex justify-end">
+        <div class="h-4 w-24 bg-white/8 rounded-full" />
       </div>
     </div>
   </div>
@@ -108,30 +108,30 @@ watch(() => props.memes, (newMemes, oldMemes) => {
   <!-- Card viewer -->
   <div
     v-else-if="current"
-    class="flex flex-col items-center pt-[7rem] pb-6 px-4 min-h-screen select-none"
+    class="flex flex-col items-center pt-36 pb-10 px-4 min-h-screen select-none"
   >
-    <!-- Progress bar -->
-    <div class="w-full max-w-lg mb-3 flex items-center gap-2">
-      <div class="flex-1 h-0.5 bg-white/10 rounded-full overflow-hidden">
+    <!-- Progress -->
+    <div class="w-full max-w-2xl mb-4 flex items-center gap-3">
+      <div class="flex-1 h-1 bg-white/12 rounded-full overflow-hidden">
         <div
-          class="h-full bg-white/40 rounded-full transition-all duration-300"
+          class="h-full bg-white/50 rounded-full transition-all duration-300"
           :style="{ width: progress + '%' }"
         />
       </div>
-      <span class="text-xs text-white/30 font-mono tabular-nums shrink-0">
-        {{ currentIndex + 1 }} / {{ memes.length
-        }}<span v-if="memeStore.isLoadingMore" class="text-white/20"> …</span>
+      <span class="text-sm text-white/40 font-mono tabular-nums shrink-0">
+        {{ currentIndex + 1 }}<span class="text-white/20"> / {{ memes.length }}</span>
+        <span v-if="memeStore.isLoadingMore" class="text-white/20"> …</span>
       </span>
     </div>
 
     <!-- Card -->
     <div
-      class="w-full max-w-lg rounded-2xl bg-[#161616] border border-white/8 overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing"
+      class="w-full max-w-2xl rounded-3xl bg-[#242424] border border-white/12 overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing"
       :style="{
         transform: isDragging
-          ? `translateX(${dragDelta * 0.15}px) rotate(${dragDelta * 0.015}deg)`
+          ? `translateX(${dragDelta * 0.12}px) rotate(${dragDelta * 0.012}deg)`
           : 'none',
-        transition: isDragging ? 'none' : 'transform 0.2s ease',
+        transition: isDragging ? 'none' : 'transform 0.25s ease',
       }"
       @mousedown="onDragStart"
       @mousemove="onDragMove"
@@ -142,41 +142,40 @@ watch(() => props.memes, (newMemes, oldMemes) => {
       @touchend="onDragEnd"
     >
       <!-- Header -->
-      <div class="flex items-start justify-between px-4 pt-4 pb-3">
+      <div class="flex items-start justify-between px-6 pt-5 pb-4">
         <div class="min-w-0">
           <a
             :href="'https://www.reddit.com/r/' + current.subreddit"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-xs font-semibold text-white/60 hover:text-white transition-colors"
+            class="text-sm font-bold text-white/70 hover:text-white transition-colors"
             @click.stop
           >r/{{ current.subreddit }}</a>
-          <p class="text-xs text-white/30 mt-0.5">u/{{ current.author }}</p>
+          <p class="text-sm text-white/40 mt-1">u/{{ current.author }}</p>
         </div>
-        <div class="flex items-center gap-1 text-xs text-white/40 shrink-0">
-          <ArrowBigUp :size="14" class="text-orange-400" />
-          <span class="font-mono">{{ formatUps(current.ups) }}</span>
+        <div class="flex items-center gap-1.5 shrink-0 mt-0.5">
+          <ArrowBigUp :size="18" class="text-orange-400" />
+          <span class="text-base font-semibold text-white/70 font-mono">{{ formatUps(current.ups) }}</span>
         </div>
       </div>
 
       <!-- Title -->
       <p
         v-if="current.title && current.title.toLowerCase() !== current.subreddit.toLowerCase()"
-        class="px-4 pb-3 text-sm text-white/85 leading-snug"
+        class="px-6 pb-4 text-base text-white/90 leading-snug font-medium"
       >{{ current.title }}</p>
 
-      <!-- Image area with hover arrows -->
-      <div class="relative bg-black/40 min-h-48 group/card">
-
+      <!-- Image area -->
+      <div class="relative bg-black/40 group/card">
         <!-- NSFW overlay -->
         <div
           v-if="isNsfw && !revealed"
-          class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 cursor-pointer"
+          class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 cursor-pointer"
           @click.stop="revealed = true"
         >
-          <div class="absolute inset-0 backdrop-blur-2xl bg-black/60" />
-          <EyeOff :size="28" class="relative text-white/40" />
-          <span class="relative text-xs text-white/50">
+          <div class="absolute inset-0 backdrop-blur-2xl bg-black/70" />
+          <EyeOff :size="36" class="relative text-white/40" />
+          <span class="relative text-sm font-medium text-white/50">
             {{ current.nsfw ? "NSFW" : "Spoiler" }} — tap to reveal
           </span>
         </div>
@@ -190,7 +189,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
             :key="current.url"
             :src="current.preview?.length ? current.preview[current.preview.length - 1] : current.url"
             :alt="current.title"
-            class="w-full max-h-[28rem] object-contain transition-opacity duration-200"
+            class="w-full max-h-[36rem] object-contain transition-opacity duration-200"
             :class="[
               imgLoaded ? 'opacity-100' : 'opacity-0',
               isNsfw && !revealed ? 'blur-2xl' : '',
@@ -200,58 +199,58 @@ watch(() => props.memes, (newMemes, oldMemes) => {
           />
         </div>
 
-        <!-- Left arrow — shown on hover -->
+        <!-- Left arrow -->
         <button
           v-if="currentIndex > 0"
           @click.stop="prev"
-          class="absolute left-0 inset-y-0 w-14 z-20 flex items-center justify-start pl-2
+          class="absolute left-0 inset-y-0 w-16 z-20 flex items-center justify-start pl-3
                  opacity-0 group-hover/card:opacity-100 transition-opacity"
         >
-          <div class="bg-black/55 hover:bg-black/80 rounded-full p-1.5 transition-colors">
-            <ChevronLeft :size="18" class="text-white" />
+          <div class="bg-black/60 hover:bg-black/85 rounded-full p-2 transition-colors">
+            <ChevronLeft :size="22" class="text-white" />
           </div>
         </button>
 
-        <!-- Right arrow — shown on hover -->
+        <!-- Right arrow -->
         <button
           v-if="currentIndex < memes.length - 1 || memeStore.isLoadingMore"
           @click.stop="next"
-          class="absolute right-0 inset-y-0 w-14 z-20 flex items-center justify-end pr-2
+          class="absolute right-0 inset-y-0 w-16 z-20 flex items-center justify-end pr-3
                  opacity-0 group-hover/card:opacity-100 transition-opacity"
         >
-          <div class="bg-black/55 hover:bg-black/80 rounded-full p-1.5 transition-colors">
-            <ChevronRight :size="18" class="text-white" />
+          <div class="bg-black/60 hover:bg-black/85 rounded-full p-2 transition-colors">
+            <ChevronRight :size="22" class="text-white" />
           </div>
         </button>
 
         <!-- Spinner -->
         <div v-if="!imgLoaded" class="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div class="w-6 h-6 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
+          <div class="w-8 h-8 border-2 border-white/15 border-t-white/50 rounded-full animate-spin" />
         </div>
 
         <!-- GIF badge -->
         <span
           v-if="isGif"
-          class="absolute bottom-2 right-2 text-[10px] font-bold bg-black/70 text-white px-1.5 py-0.5 rounded z-20 pointer-events-none"
+          class="absolute bottom-3 right-3 text-xs font-bold bg-black/70 text-white px-2 py-1 rounded-md z-20 pointer-events-none tracking-wider"
         >GIF</span>
       </div>
 
       <!-- Footer -->
-      <div class="flex items-center justify-end px-4 py-2.5">
+      <div class="flex items-center justify-end px-6 py-4">
         <a
           :href="current.postLink"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-center gap-1 text-xs text-white/25 hover:text-white/60 transition-colors"
+          class="flex items-center gap-1.5 text-sm text-white/30 hover:text-white/70 transition-colors"
           @click.stop
         >
-          <ExternalLink :size="11" />
-          Reddit
+          <ExternalLink :size="14" />
+          Open on Reddit
         </a>
       </div>
     </div>
 
-    <p class="mt-4 text-xs text-white/20">swipe or use ← → keys</p>
+    <p class="mt-5 text-sm text-white/20 tracking-wide">swipe or use ← → keys</p>
   </div>
 
   <!-- Lightbox -->
@@ -259,48 +258,45 @@ watch(() => props.memes, (newMemes, oldMemes) => {
     <Transition name="lb">
       <div
         v-if="lightbox && current"
-        class="fixed inset-0 z-50 bg-black/95 flex flex-col"
+        class="fixed inset-0 z-50 bg-black/96 flex flex-col"
         @click.self="lightbox = false"
       >
-        <!-- Top bar -->
-        <div class="flex items-center justify-between px-4 py-3 shrink-0">
+        <div class="flex items-center justify-between px-6 py-4 shrink-0">
           <div class="min-w-0">
-            <p class="text-xs text-white/40 truncate">r/{{ current.subreddit }} · u/{{ current.author }}</p>
-            <p class="text-sm text-white/80 mt-0.5 line-clamp-1">{{ current.title }}</p>
+            <p class="text-sm text-white/40 truncate">r/{{ current.subreddit }} · u/{{ current.author }}</p>
+            <p class="text-base font-medium text-white/85 mt-1 line-clamp-2 leading-snug">{{ current.title }}</p>
           </div>
           <button
             @click="lightbox = false"
-            class="ml-4 shrink-0 p-1.5 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+            class="ml-6 shrink-0 p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors"
           >
-            <X :size="18" />
+            <X :size="22" />
           </button>
         </div>
 
-        <!-- Full image -->
         <div
-          class="flex-1 flex items-center justify-center overflow-auto p-4"
+          class="flex-1 flex items-center justify-center overflow-auto p-6"
           @click.self="lightbox = false"
         >
           <img
             :src="current.url"
             :alt="current.title"
-            class="max-w-full max-h-full object-contain rounded-lg"
+            class="max-w-full max-h-full object-contain rounded-xl"
           />
         </div>
 
-        <!-- Bottom bar -->
-        <div class="flex items-center justify-between px-4 py-3 shrink-0">
-          <div class="flex items-center gap-1.5 text-xs text-white/40">
-            <ArrowBigUp :size="13" class="text-orange-400" />
+        <div class="flex items-center justify-between px-6 py-4 shrink-0">
+          <div class="flex items-center gap-2 text-sm text-white/50">
+            <ArrowBigUp :size="16" class="text-orange-400" />
             {{ formatUps(current.ups) }} upvotes
           </div>
           <a
             :href="current.postLink"
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center gap-1.5 text-xs text-white/40 hover:text-white transition-colors"
+            class="flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
           >
-            <ExternalLink :size="12" />
+            <ExternalLink :size="14" />
             Open on Reddit
           </a>
         </div>

@@ -18,7 +18,7 @@ onUnmounted(() => window.removeEventListener("popstate", onPopState));
 </script>
 
 <template>
-  <main class="min-h-screen bg-[#0d0d0d] text-white">
+  <main class="min-h-screen bg-[#111111] text-white">
     <Navbar />
     <Error v-if="memeStore.error && !memeStore.isLoading" :message="memeStore.error!" />
     <Memes v-else :memes="memeStore.memes" />
