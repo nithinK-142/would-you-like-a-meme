@@ -90,7 +90,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
   <!-- Skeleton -->
   <div
     v-if="memeStore.isLoading"
-    class="flex items-center justify-center px-4" style="height: 100vh; padding-top: 73px; box-sizing: border-box;"
+    class="flex items-center justify-center px-4" style="height: 100vh; padding-top: 64px; box-sizing: border-box;"
   >
     <div class="w-full max-w-2xl rounded-3xl bg-white/5 overflow-hidden animate-pulse">
       <div class="p-6 space-y-3">
@@ -108,7 +108,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
   <!-- Card viewer -->
   <div
     v-else-if="current"
-    class="flex flex-col items-center justify-center px-4 select-none gap-3" style="height: 100vh; padding-top: 73px; box-sizing: border-box;"
+    class="flex flex-col items-center justify-center px-4 select-none gap-3" style="height: 100vh; padding-top: 64px; box-sizing: border-box;"
   >
     <!-- Progress -->
     <div class="w-full max-w-2xl flex items-center gap-3">
@@ -126,7 +126,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
 
     <!-- Card -->
     <div
-      class="w-full max-w-2xl rounded-3xl bg-[#242424] border border-white/12 overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing flex flex-col" style="max-height: calc(100vh - 9rem)"
+      class="w-full max-w-2xl rounded-3xl bg-[#242424] border border-white/12 overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing flex flex-col mb-4" style="max-height: calc(100vh - 5.5rem)"
       :style="{
         transform: isDragging
           ? `translateX(${dragDelta * 0.12}px) rotate(${dragDelta * 0.012}deg)`
@@ -240,7 +240,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
       </div>
 
       <!-- Footer -->
-      <div class="flex items-center justify-end px-6 py-4">
+      <div class="flex items-center justify-end px-6 py-2">
         <a
           :href="current.postLink"
           target="_blank"
@@ -254,7 +254,6 @@ watch(() => props.memes, (newMemes, oldMemes) => {
       </div>
     </div>
 
-    <p class="text-sm text-white/20 tracking-wide">swipe or use ← → keys</p>
   </div>
 
   <!-- Lightbox -->
@@ -280,13 +279,13 @@ watch(() => props.memes, (newMemes, oldMemes) => {
         </div>
 
         <div
-          class="relative z-10 flex-1 flex items-center justify-center overflow-auto p-6"
+          class="relative z-10 flex-1 flex items-center justify-center overflow-hidden px-4 py-2"
           @click.self="lightbox = false"
         >
           <img
             :src="current.url"
             :alt="current.title"
-            class="max-w-full max-h-full object-contain rounded-xl"
+            class="w-full h-full object-contain"
           />
         </div>
 

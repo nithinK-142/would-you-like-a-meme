@@ -15,7 +15,7 @@ const select = (value: string) => {
 <template>
   <!-- Navbar -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a]/95 backdrop-blur border-b border-white/10">
-    <div class="flex items-center justify-between px-5 py-4">
+    <div class="flex items-center justify-between px-4 py-2">
       <div class="flex items-center gap-3">
         <button
           @click="sidebarOpen = true"
