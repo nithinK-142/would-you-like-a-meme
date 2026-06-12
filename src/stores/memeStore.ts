@@ -14,6 +14,7 @@ export interface Meme {
 }
 
 export const SUBREDDITS = [
+  { label: "All", value: "all" },
   { label: "r/memes", value: "memes" },
   { label: "r/dankmemes", value: "dankmemes" },
   { label: "r/me_irl", value: "me_irl" },
@@ -22,37 +23,55 @@ export const SUBREDDITS = [
   { label: "r/shitposting", value: "shitposting" },
 ];
 
+const VALID_SUBREDDITS = new Set(SUBREDDITS.map((s) => s.value));
+const LS_KEY = "meme-feed:subreddit";
+
+export const resolveInitialSubreddit = (): string => {
+  const fromUrl = new URLSearchParams(window.location.search).get("r");
+  if (fromUrl && VALID_SUBREDDITS.has(fromUrl)) return fromUrl;
+  return "all";
+};
+
 export const useMemeStore = defineStore("memeStore", () => {
   const memes = ref<Meme[]>([]);
-  const isLoading = ref<boolean>(false);
-  const isLoadingMore = ref<boolean>(false);
+  const isLoading = ref(false);
+  const isLoadingMore = ref(false);
   const error = ref<string | null>(null);
-  const selectedSubreddit = ref<string>("memes");
+  const selectedSubreddit = ref<string>(resolveInitialSubreddit());
   const seenUrls = ref<Set<string>>(new Set());
-  const count = ref<number>(0);
+  const count = ref(0);
 
   const hasNsfw = computed(() => memes.value.some((m) => m.nsfw || m.spoiler));
 
-  const buildUrl = (subreddit: string, n = 12) =>
+  const buildUrl = (subreddit: string, n = 18) =>
     `https://meme-api.com/gimme/${subreddit}/${n}`;
 
-  const dedupMemes = (incoming: Meme[]): Meme[] => {
-    return incoming.filter((m) => {
+  const dedupMemes = (incoming: Meme[]): Meme[] =>
+    incoming.filter((m) => {
       if (seenUrls.value.has(m.url)) return false;
       seenUrls.value.add(m.url);
       return true;
     });
+
+  const pushHistory = (subreddit: string) => {
+    const url = new URL(window.location.href);
+    if (subreddit === "all") {
+      url.searchParams.delete("r");
+    } else {
+      url.searchParams.set("r", subreddit);
+    }
+    window.history.pushState({ subreddit }, "", url.toString());
   };
 
-  const fetchMemes = async (subreddit = selectedSubreddit.value) => {
+  const fetchMemes = async () => {
     isLoading.value = true;
     error.value = null;
+    memes.value = [];
     seenUrls.value.clear();
     count.value = 0;
 
     try {
-      // Fetch extra to account for dedup losses
-      const response = await fetch(buildUrl(subreddit, 18));
+      const response = await fetch(buildUrl(selectedSubreddit.value));
       if (!response.ok) throw new Error(`Failed to fetch (${response.status})`);
       const data = await response.json();
       const fresh = dedupMemes(data.memes ?? []);
@@ -70,7 +89,7 @@ export const useMemeStore = defineStore("memeStore", () => {
     isLoadingMore.value = true;
 
     try {
-      const response = await fetch(buildUrl(selectedSubreddit.value, 18));
+      const response = await fetch(buildUrl(selectedSubreddit.value));
       if (!response.ok) throw new Error(`Failed to fetch (${response.status})`);
       const data = await response.json();
       const fresh = dedupMemes(data.memes ?? []);
@@ -84,8 +103,19 @@ export const useMemeStore = defineStore("memeStore", () => {
   };
 
   const switchSubreddit = (subreddit: string) => {
+    if (!VALID_SUBREDDITS.has(subreddit)) return;
     selectedSubreddit.value = subreddit;
-    fetchMemes(subreddit);
+    localStorage.setItem(LS_KEY, subreddit);
+    pushHistory(subreddit);
+    fetchMemes();
+  };
+
+  const restoreFromUrl = () => {
+    const fromUrl = new URLSearchParams(window.location.search).get("r");
+    const sub = fromUrl && VALID_SUBREDDITS.has(fromUrl) ? fromUrl : "all";
+    selectedSubreddit.value = sub;
+    localStorage.setItem(LS_KEY, sub);
+    fetchMemes();
   };
 
   return {
@@ -99,5 +129,6 @@ export const useMemeStore = defineStore("memeStore", () => {
     fetchMemes,
     loadMore,
     switchSubreddit,
+    restoreFromUrl,
   };
 });

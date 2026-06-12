@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { useMemeStore } from "@/stores/memeStore";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import Navbar from "./components/Navbar.vue";
 import Error from "./components/Error.vue";
 import Memes from "./components/Memes.vue";
 
 const memeStore = useMemeStore();
 
-onMounted(() => memeStore.fetchMemes());
+const onPopState = () => memeStore.restoreFromUrl();
+
+onMounted(() => {
+  memeStore.fetchMemes();
+  window.addEventListener("popstate", onPopState);
+});
+
+onUnmounted(() => window.removeEventListener("popstate", onPopState));
 </script>
 
 <template>
