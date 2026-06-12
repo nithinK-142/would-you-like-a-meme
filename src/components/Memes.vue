@@ -258,10 +258,11 @@ watch(() => props.memes, (newMemes, oldMemes) => {
     <Transition name="lb">
       <div
         v-if="lightbox && current"
-        class="fixed inset-0 z-50 bg-black/96 flex flex-col"
+        class="fixed inset-0 z-50 flex flex-col"
         @click.self="lightbox = false"
       >
-        <div class="flex items-center justify-between px-6 py-4 shrink-0">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-2xl" @click="lightbox = false" />
+        <div class="relative z-10 flex items-center justify-between px-6 py-4 shrink-0">
           <div class="min-w-0">
             <p class="text-sm text-white/40 truncate">r/{{ current.subreddit }} · u/{{ current.author }}</p>
             <p class="text-base font-medium text-white/85 mt-1 line-clamp-2 leading-snug">{{ current.title }}</p>
@@ -275,7 +276,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
         </div>
 
         <div
-          class="flex-1 flex items-center justify-center overflow-auto p-6"
+          class="relative z-10 flex-1 flex items-center justify-center overflow-auto p-6"
           @click.self="lightbox = false"
         >
           <img
@@ -285,7 +286,7 @@ watch(() => props.memes, (newMemes, oldMemes) => {
           />
         </div>
 
-        <div class="flex items-center justify-between px-6 py-4 shrink-0">
+        <div class="relative z-10 flex items-center justify-between px-6 py-4 shrink-0">
           <div class="flex items-center gap-2 text-sm text-white/50">
             <ArrowBigUp :size="16" class="text-orange-400" />
             {{ formatUps(current.ups) }} upvotes
